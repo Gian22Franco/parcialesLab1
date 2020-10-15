@@ -239,3 +239,26 @@ int cliente_ordenarPorNombre(Cliente *pArrays, int limite, int orden) {
 	}
 	return retorno;
 }
+
+//--------------------------------------ALTA FORZADA----------------------------------------------//
+
+int cliente_altaForzada(Cliente * pArray, int limite , char * nombreCliente, char * apellidoCliente, int cuitCliente){
+
+	int retorno = -1;
+	int indice;
+	if (cliente_buscarLibreRef(pArray,limite, &indice) == 0)
+	{
+		strncpy(pArray[indice].nombreCliente,nombreCliente,LONG);
+		strncpy(pArray[indice].apellidoCliente,apellidoCliente,LONG);
+		pArray[indice].cuitCliente = cuitCliente;
+		pArray[indice].idCliente = cliente_generarNuevoId();
+		pArray[indice].isEmpty = FALSE;
+		retorno = 0;
+	}
+	else
+	{
+		printf("\nError");
+	}
+	return retorno;
+}
+

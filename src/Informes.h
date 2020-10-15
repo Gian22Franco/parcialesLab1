@@ -18,17 +18,14 @@
 #include "Cliente.h"
 #include "Publicaciones.h"
 
-typedef struct
-{
-	char cuit[20];
-	int isEmpty;
-
-}ListaCliente;
 
 
-void informes_generarListaClientes(Publicaciones* pArrays, int limite, Cliente * ArrayCliente, int limiteCliente);
-void informes_inicializarArray(ListaCliente cuits[], int lenCuits);
+
+int informes_clienteConMasAvisos(Publicaciones* pArray,int limite ,Cliente* pArrayCliente,int limiteCliente);
+int informes_contarAvisos (Publicaciones* pArrays, int limite, int idCliente, int* avisos);
 int informes_catidadAvisosPausados(Publicaciones *pArray, int limite, Cliente * ArrayCliente, int limiteCliente);
-int informes_clienteConMasAvisos(Publicaciones *pArray, int limite, Cliente * ArrayCliente, int limiteCliente);
+int informes_rubroConMasAvisos(Publicaciones* pArray,int limite ,Cliente* pArrayCliente,int limiteCliente);
+int informes_contarRubro (Publicaciones* pArrays, int limite, int numeroRubro, int* rubros);
+
 
 #endif /* INFORMES_H_ */

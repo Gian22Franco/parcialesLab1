@@ -20,11 +20,29 @@ int main(void)
 	setbuf(stdout, NULL);
 	int op;
 	int opInforme;
+
 	Cliente arrayCliente[QTY_CLIENTES];
 	Publicaciones arrayPublicaciones[QTY_PUBLICACIONES];
 
 	cliente_init(arrayCliente, QTY_CLIENTES);
 	publicaciones_init(arrayPublicaciones, QTY_PUBLICACIONES);
+
+		cliente_altaForzada(arrayCliente, QTY_CLIENTES,"Gianfranco","Lofeudo",111111);
+		cliente_altaForzada(arrayCliente, QTY_CLIENTES,"Mateo","Melli",222222);
+		cliente_altaForzada(arrayCliente, QTY_CLIENTES,"Carolina","Torrado",33333);
+		cliente_altaForzada(arrayCliente, QTY_CLIENTES,"Alberto","Lofeudo",44444);
+		cliente_altaForzada(arrayCliente, QTY_CLIENTES,"Flavia","Forin",55555);
+		cliente_altaForzada(arrayCliente, QTY_CLIENTES,"Fernando","Lofeudo",66666);
+
+
+		publicaciones_altaForzada(arrayPublicaciones,QTY_PUBLICACIONES,2,3,"aaaaaaaaaa");
+		publicaciones_altaForzada(arrayPublicaciones,QTY_PUBLICACIONES,3,3,"bbbbbbbbbb");
+		publicaciones_altaForzada(arrayPublicaciones,QTY_PUBLICACIONES,1,2,"cccccccccc");
+		publicaciones_altaForzada(arrayPublicaciones,QTY_PUBLICACIONES,1,3,"dddddddddd");
+		publicaciones_altaForzada(arrayPublicaciones,QTY_PUBLICACIONES,5,5,"eeeeeeeeee");
+		publicaciones_altaForzada(arrayPublicaciones,QTY_PUBLICACIONES,4,5,"ffffffffff");
+		publicaciones_altaForzada(arrayPublicaciones,QTY_PUBLICACIONES,6,5,"gggggggggg");
+
 	do {
 
 		utn_getInt(
@@ -34,35 +52,35 @@ int main(void)
 		switch (op) {
 		case 1:
 			if (cliente_alta(arrayCliente, QTY_CLIENTES) == 0) {
-				printf("\n----------------------------\n");
+				printf("\n-----------------------------------------------------------------------------------------------\n");
 				printf("\nCarga realizada con exito!!\n");
-				printf("\n----------------------------\n");
+				printf("\n-----------------------------------------------------------------------------------------------\n");
 			}
 			break;
 		case 2:
 			printf("\n                            \n");
-			printf("\n----------------------------\n");
+			printf("\n-----------------------------------------------------------------------------------------------\n");
 			if (cliente_modificar(arrayCliente, QTY_CLIENTES) == 0) {
-				printf("\n----------------------------\n");
+				printf("\n-----------------------------------------------------------------------------------------------\n");
 				printf("\nModificación realizada con exito!!\n");
-				printf("\n----------------------------\n");
+				printf("\n-----------------------------------------------------------------------------------------------\n");
 			}
 			break;
 		case 3:
 			printf("\n                            \n");
-			printf("\n----------------------------\n");
-			if (cliente_baja(arrayCliente, QTY_CLIENTES) == 0) {
-				printf("\n----------------------------\n");
+			printf("\n-----------------------------------------------------------------------------------------------\n");
+			if (publicaciones_bajaClientes(arrayPublicaciones, QTY_PUBLICACIONES, arrayCliente, QTY_CLIENTES)==0) {
+				printf("\n-----------------------------------------------------------------------------------------------\n");
 				printf("\nBaja realizada con exito!!\n");
-				printf("\n----------------------------\n");
+				printf("\n-----------------------------------------------------------------------------------------------\n");
 			}
 			break;
 		case 4:
 			if (publicaciones_alta(arrayPublicaciones, QTY_PUBLICACIONES, arrayCliente, QTY_CLIENTES )
 					== 0) {
-				printf("\n--------------------------------------\n");
+				printf("\n-----------------------------------------------------------------------------------------------\n");
 				printf("\nAlta publicación realizada con exito!!\n");
-				printf("\n--------------------------------------\n");
+				printf("\n-----------------------------------------------------------------------------------------------\n");
 			}
 			break;
 		case 5:
@@ -71,15 +89,15 @@ int main(void)
 				printf("\n----------------------------\n");
 			break;
 		case 6:
-				printf("\n----------------------------\n");
+				printf("\n-----------------------------------------------------------------------------------------------\n");
 				publicaciones_reanudarPublicacion(arrayPublicaciones, QTY_PUBLICACIONES, arrayCliente, QTY_CLIENTES);
-				printf("\n----------------------------\n");
+				printf("\n-----------------------------------------------------------------------------------------------\n");
 
 			break;
 		case 7:
-				printf("\n----------------------------\n");
-				informes_generarListaClientes(arrayPublicaciones, QTY_PUBLICACIONES, arrayCliente, QTY_CLIENTES);
-				printf("\n----------------------------\n");
+				printf("\n-----------------------------------------------------------------------------------------------\n");
+				publicaciones_imprimirListaClientes(arrayPublicaciones, QTY_PUBLICACIONES, arrayCliente, QTY_CLIENTES);
+				printf("\n-----------------------------------------------------------------------------------------------\n");
 
 			break;
 		case 8:
@@ -89,19 +107,19 @@ int main(void)
 				{
 					switch (opInforme) {
 					case 1:
-						printf("\n----------------------------\n");
+						printf("\n-----------------------------------------------------------------------------------------------\n");
 						informes_clienteConMasAvisos(arrayPublicaciones,	QTY_PUBLICACIONES, arrayCliente, QTY_CLIENTES);
-						printf("\n----------------------------\n");
+						printf("\n-----------------------------------------------------------------------------------------------\n");
 						break;
 					case 2:
-						printf("\n----------------------------\n");
+						printf("\n-----------------------------------------------------------------------------------------------\n");
 						informes_catidadAvisosPausados(arrayPublicaciones, QTY_PUBLICACIONES, arrayCliente, QTY_CLIENTES);
-						printf("\n----------------------------\n");
+						printf("\n-----------------------------------------------------------------------------------------------\n");
 						break;
 					case 3:
-						printf("\n----------------------------\n");
-
-						printf("\n----------------------------\n");
+						printf("\n-----------------------------------------------------------------------------------------------\n");
+						informes_rubroConMasAvisos(arrayPublicaciones,	QTY_PUBLICACIONES, arrayCliente, QTY_CLIENTES);
+						printf("\n-----------------------------------------------------------------------------------------------\n");
 						break;
 					}
 			 }

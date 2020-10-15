@@ -32,15 +32,36 @@ typedef struct {
 
 int publicaciones_init(Publicaciones *pArray, int limite);
 int publicaciones_alta(Publicaciones *pArray, int limite, Cliente *ArrayCliente, int limiteCliente);
+
+
 int publicaciones_baja(Publicaciones *pArray, int limite,Cliente *ArrayCliente, int limiteCliente);
+int publicaciones_bajaClientes(Publicaciones *pArray, int limite,Cliente *ArrayCliente, int limiteCliente);
+int publicaciones_bajaPublicacionesPorCliente(Publicaciones* pArray,int limite, int idCliente);
+
+
 int publicaciones_modificar(Publicaciones *pArray, int limite, Cliente *ArrayCliente, int limiteCliente);
-int publicaciones_imprimir(Publicaciones *pArray, int limite, Cliente *ArrayCliente, int limiteCliente);
-int publicaciones_imprimirPorId(Publicaciones*pArrays, int limite, Cliente* ArrayCliente, int limiteCliente,int idImprimir);
+
+
 int publicaciones_buscarLibre(Publicaciones *pArray, int limite);
 int publicaciones_buscarLibreRef(Publicaciones *pArray, int limite, int *pIndice);
 int publicaciones_buscarIndicePorId(Publicaciones *pArray, int limite, int idBuscar,int *pIndice);
+
+
+int publicaciones_imprimir(Publicaciones *pArray, int limite, Cliente *ArrayCliente, int limiteCliente);
+int publicaciones_imprimirPorId(Publicaciones*pArrays, int limite, Cliente* ArrayCliente, int limiteCliente,int idImprimir);
+int publicaciones_imprimirPublicacionesId(Publicaciones* pArray,int limite,int idCliente);
+int publicaciones_imprimirListaClientes(Publicaciones* pArray,int limite,Cliente* pArrayCliente,int limiteCliente);
+
+
+int publicaciones_publicacionesPorCliente(Publicaciones* pArray,int limite,int id,int *pResultado);
+
+
 int publicaciones_pausarPublicacion(Publicaciones *pArray, int limite, Cliente * ArrayCliente, int limiteCliente);
 int publicaciones_reanudarPublicacion(Publicaciones *pArray, int limite, Cliente * ArrayCliente, int limiteCliente);
+
+
 int publicaciones_ordenarPorNombre(Publicaciones *pArrays, int limite, int orden);
+
+int publicaciones_altaForzada(Publicaciones * pArray, int limite ,int idCliente,int numeroRubro,  char * textoAviso);
 
 #endif /* PUBLICACIONES_H_ */

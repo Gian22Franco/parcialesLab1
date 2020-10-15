@@ -127,7 +127,7 @@ int publicaciones_baja(Publicaciones *pArrays, int limite, Cliente *pArrayClient
 
 	if (pArrays != NULL && limite > 0 && pArrayCliente != NULL && limiteCliente > 0)
 	{
-		if(utn_getInt("\nIngrese el cuit del cliente: \n","\nError!\n",	&auxBuffer, 3,MAX_NUMEROS, MIN_NUMEROS)==0)
+		if(utn_getInt("\nIngrese el id del cliente: \n","\nError!\n",	&auxBuffer, 3,MAX_NUMEROS, MIN_NUMEROS)==0)
 		{
 			cliente_imprimir(pArrayCliente, QTY_CLIENTES);
 		}
@@ -144,6 +144,97 @@ int publicaciones_baja(Publicaciones *pArrays, int limite, Cliente *pArrayClient
 	}
 	return retorno;
 }
+/** \brief  Función especifica del enunciado que permite eliminar un cliente y todas sus publicaciones asociadas. *
+ *           * \param list Publicaciones* Pointer to array of employees
+ *           * \param len limite Array length
+ *           * \param list Cliente* Pointer to array of employees
+ *           * \param len limiteCliente Array length
+ *
+ *           * \return int Return (-1) if Error [Invalid length or NULL pointer] - (0) if Ok *
+ *
+ **/
+int publicaciones_bajaClientes (Publicaciones* pArray, int limite, Cliente* pArrayCliente, int limiteCliente)
+{
+	int retorno = -1;
+	int idABorrar;
+	int indiceABorrar;
+	int auxBuffer;
+	if (pArray != NULL && limite>0 && pArrayCliente!=NULL && limiteCliente>0)
+	{
+		cliente_imprimir(pArrayCliente, limiteCliente);
+		printf("\n                            \n");
+		if(utn_getInt("\nIngrese el id del cliente a borrar: \n","\nError!\n",&idABorrar, 3,MAX_NUMEROS, MIN_NUMEROS)==0 &&
+				cliente_buscarIndicePorId(pArrayCliente, limiteCliente, idABorrar, &indiceABorrar)==0 &&
+				publicaciones_imprimirPublicacionesId(pArray, limite, idABorrar)==0)
+		{
+			if(utn_getInt("\nSeguro quiere eliminar la informacion ? (SI = 1 / NO = 2)\n","ERROR",&auxBuffer, 3,MAX_NUMEROS, MIN_NUMEROS)== 0)
+			{
+				if(auxBuffer == 1 && publicaciones_bajaPublicacionesPorCliente(pArray,limite,idABorrar)==0)
+				{
+					pArrayCliente[indiceABorrar].isEmpty=TRUE;
+					retorno=0;
+				}
+			}
+		}
+	}
+	return retorno;
+}
+/** \brief  Función que permite dar de baja las publicaciones que corresponden a un determinado cliente *
+ *           * \param list Publicaciones* Pointer to array of employees
+ *           * \param  limite Array length
+ *           * \param int idCliente Array length
+ *
+ *           * \return int Return (-1) if Error [Invalid length or NULL pointer] - (0) if Ok *
+ *
+ **/
+int publicaciones_bajaPublicacionesPorCliente(Publicaciones* pArray,int limite, int idCliente)
+{
+	int retorno=-1;
+	int i;
+	if(pArray!=NULL && limite>0 && idCliente>0)
+	{
+		for(i=0;i<limite;i++)
+		{
+			if(pArray[i].idCliente==idCliente)
+			{
+				pArray[i].isEmpty=TRUE;
+				retorno=0;
+			}
+		}
+	}
+	return retorno;
+}
+
+/** \brief  Función que permite imprimir las publicaciones de un cliente segun su id *
+ *           * \param list Publicaciones* Pointer to array of employees
+ *           * \param  limite Array length
+ *           * \param int idCliente Array length
+ *
+ *           * \return int Return (-1) if Error [Invalid length or NULL pointer] - (0) if Ok *
+ *
+ **/
+int publicaciones_imprimirPublicacionesId(Publicaciones* pArray,int limite,int idCliente)
+{
+	int retorno=-1;
+	int i;
+
+	if(pArray!=NULL && limite>0 && idCliente>-1)
+	{
+		printf("\nID del cliente: %d\n", idCliente);
+
+		for(i=0;i<limite;i++)
+		{
+			if(  pArray[i].isEmpty == FALSE && pArray[i].idCliente == idCliente)
+			{
+				printf("\nTexto del aviso: %s - Núnero del Rubro:%d - ID Publicacion:%d - Estado de la Publicacion: %d\n",
+						pArray[i].textoAviso,pArray[i].numeroRubro,pArray[i].idPublicaciones,pArray[i].estadoPublicacion);
+				retorno=0;
+			}
+		}
+	}
+	return retorno;
+}
+
 /** \brief  Función que permite modificar una Publicación *
  *           * \param list Publicaciones* Pointer to array of employees
  *           * \param len limite Array length
@@ -309,7 +400,15 @@ int publicaciones_ordenarPorNombre(Publicaciones *pArrays, int limite, int orden
 	return retorno;
 }
 
-
+/** \brief  Función que permite imprimir las publicaciones asociadas a un ID de cliente*
+ *           * \param list Publicaciones* Pointer to array of employees
+ *           * \param len limite Array length
+ *           * \param list Cliente* Pointer to array of employees
+ *           * \param len limiteCliente Array length
+ *
+ *           * \return int Return (-1) if Error [Invalid length or NULL pointer] - (0) if Ok *
+ *
+ **/
 int publicaciones_imprimirPorId(Publicaciones*pArrays, int limite, Cliente* pArrayCliente, int limiteCliente,int idImprimir)
 {
 	int retorno = -1;
@@ -326,12 +425,79 @@ int publicaciones_imprimirPorId(Publicaciones*pArrays, int limite, Cliente* pArr
 
 	return retorno;
 }
+/** \brief  Función que permite imprimir los clientes y cuantas publicaciones activas tienen*
+ *           * \param list Publicaciones* Pointer to array of employees
+ *           * \param len limite Array length
+ *           * \param list Cliente* Pointer to array of employees
+ *           * \param len limiteCliente Array length
+ *
+ *           * \return int Return (-1) if Error [Invalid length or NULL pointer] - (0) if Ok *
+ *
+ **/
+int publicaciones_imprimirListaClientes(Publicaciones* pArray, int limite, Cliente* pArrayCliente,int limiteCliente)
+{
+	int retorno=-1;
+	int i;
+	int cantidadAvisos=0;
+	if(pArray!=NULL && limite>0 && pArrayCliente!=NULL && limiteCliente>0)
+	{
+		for(i=0; i<limiteCliente; i++)
+		{
+			if(publicaciones_publicacionesPorCliente(pArray,limite,pArrayCliente[i].idCliente,&cantidadAvisos)==0)
+			{
+				printf("\n Apellido Cliente: %s - Nombre Cliente: %s - ID Cliente: %d - Cuit Cliente: %d - Cantidad Avisos: %d\n",pArrayCliente[i].apellidoCliente, pArrayCliente[i].nombreCliente, pArrayCliente[i].idCliente, pArrayCliente[i].cuitCliente, cantidadAvisos);
+				retorno=0;
+			}
+		}
+	}
 
+	return retorno;
+}
+/** \brief  Función que permite calcular cuantas publicaciones tienen un cliente*
+ *           * \param list Publicaciones* Pointer to array of employees
+ *           * \param len limite Array length
+ *           * \param id  id del cliente
+ *           * \param pResultado puntero que devuelve el contador
+ *
+ *           * \return int Return (-1) if Error [Invalid length or NULL pointer] - (0) if Ok *
+ *
+ **/
+int publicaciones_publicacionesPorCliente(Publicaciones* pArray,int limite,int id,int *pResultado)
+{
+	int retorno=-1;
+	int indiceAviso;
+	int contadorAvisos=0;
+
+	if(pArray!=NULL && limite>0 && id>0 && pResultado!=NULL)
+	{
+		for(indiceAviso=0;indiceAviso<limite;indiceAviso++)
+		{
+			if(pArray[indiceAviso].isEmpty==FALSE && id==pArray[indiceAviso].idCliente && pArray[indiceAviso].estadoPublicacion== ACTIVA)
+			{
+				contadorAvisos++;
+				retorno=0;
+			}
+		}
+	}
+	*pResultado=contadorAvisos;
+	return retorno;
+}
+
+/** \brief  Función que permite pausar una publicacion*
+ *           * \param list Publicaciones* Pointer to array of employees
+ *           * \param len limite Array length
+ *           * \param list Cliente* Pointer to array of employees
+ *           * \param len limiteCliente Array length
+ *
+ *           * \return int Return (-1) if Error [Invalid length or NULL pointer] - (0) if Ok *
+ *
+ **/
 int publicaciones_pausarPublicacion(Publicaciones *pArray, int limite, Cliente * ArrayCliente, int limiteCliente)
 {
 	int retorno = -1;
 	int auxBuffer;
 	int opcion;
+
 	printf("\n-------------------------------\n");
 	publicaciones_imprimir(pArray, limite, ArrayCliente, limiteCliente);
 	printf("\n                               \n");
@@ -341,6 +507,7 @@ int publicaciones_pausarPublicacion(Publicaciones *pArray, int limite, Cliente *
 	{
 		if(utn_getInt("\nIngrese el id de la publicacion que quiere pausar: \n","\nError!\n",	&auxBuffer, 3,MAX_NUMEROS, MIN_NUMEROS)==0)
 				{
+			// validar id ingresado, findid
 					for (int i = 0; i < limiteCliente; i++ )
 					{
 						if(auxBuffer == ArrayCliente[i].idCliente)
@@ -374,7 +541,15 @@ int publicaciones_pausarPublicacion(Publicaciones *pArray, int limite, Cliente *
 }
 
 
-
+/** \brief  Función que permite reanudar una publicacion*
+ *           * \param list Publicaciones* Pointer to array of employees
+ *           * \param len limite Array length
+ *           * \param list Cliente* Pointer to array of employees
+ *           * \param len limiteCliente Array length
+ *
+ *           * \return int Return (-1) if Error [Invalid length or NULL pointer] - (0) if Ok *
+ *
+ **/
 int publicaciones_reanudarPublicacion(Publicaciones *pArray, int limite, Cliente * ArrayCliente, int limiteCliente)
 {
 	int retorno = -1;
@@ -416,6 +591,33 @@ int publicaciones_reanudarPublicacion(Publicaciones *pArray, int limite, Cliente
 						}
 					}
 				}
+	}
+	return retorno;
+}
+
+//--------------------------------------ALTA FORZADA----------------------------------------------//
+/** \brief  Función permite generar una alta forzada de publicaciones*
+ *           * \param list Publicaciones* Pointer to array of employees
+ *           * \param len limite Array length
+ *           * \param list Cliente* Pointer to array of employees
+ *           * \param len limiteCliente Array length
+ *
+ *           * \return int Return (-1) if Error [Invalid length or NULL pointer] - (0) if Ok *
+ *
+ **/
+int publicaciones_altaForzada(Publicaciones * pArray, int limite ,int idCliente,int numeroRubro,  char * textoAviso){
+
+	int retorno = -1;
+	int indice;
+	if (publicaciones_buscarLibreRef(pArray,limite, &indice) == 0)
+	{
+		strncpy(pArray[indice].textoAviso,textoAviso,LONG);
+		pArray[indice].idCliente = idCliente;
+		pArray[indice].numeroRubro=numeroRubro;
+		pArray[indice].estadoPublicacion=ACTIVA;
+		pArray[indice].idPublicaciones = publicaciones_generarNuevoId();
+		pArray[indice].isEmpty = FALSE;
+		retorno=0;
 	}
 	return retorno;
 }

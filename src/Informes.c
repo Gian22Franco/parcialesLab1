@@ -13,92 +13,84 @@
 #include "Publicaciones.h"
 #include "utn.h"
 
-static int informes_estaEnMiListaDeCuits(ListaCliente *cuits, int lenCuits, char * cuit);
-static void informes_listaClientesConPublicaciones(ListaCliente *cuits, int lenCuits, Cliente * ArrayCliente);
 
-/** \brief  To indicate that all position in the array are empty, *
- *           this function put the flag (isEmpty) in TRUE in all *
- *           position of the array
- *           * \param list informes* Pointer to array of employees
- *           * \param len lenCuits Array length
- *           * \return int Return (-1) if Error [Invalid length or NULL pointer] - (0) if Ok *
- *
- **/
-void informes_inicializarArray(ListaCliente cuits[], int lenCuits)
+/** \brief Permite calcular el cliente con mas avisos
+ * \param Publicaciones* Pointer to Publicaciones array
+ * \param int limite, Ads's array lenght
+ * \param Cliente* pArrayCliente, Pointer to pArrayCliente array
+ * \param int limiteCliente, cliente lenght
+
+ * \return (0) if OK or (-1) if [Invalid lenght or NULL pointer received or employee not found
+ */
+int informes_clienteConMasAvisos(Publicaciones* pArray,int limite ,Cliente* pArrayCliente,int limiteCliente)
 {
-	for(int i = 0; i<lenCuits ; i++)
+	int retorno=-1;
+	int indiceCliente;
+	int cantidadAvisos;
+	int auxBuffer=TRUE;
+	int maximoAvisos;
+	int idMaximoAvisos;
+	int indiceAImprimir;
+
+	if(pArray!=NULL && limite>0 && pArrayCliente!=NULL && limiteCliente>0)
 	{
-		cuits[i].isEmpty = TRUE;
-	}
-}
-/** \brief  Función que permite ver si un cuit esta dentro de la lista, *
- *           * \param list ListaCliente* Pointer to array of ListaCliente
- *           * \param len lenCuits Array length
- *           * \param list *cuit
- *           * \return int Return (-1) if Error [Invalid length or NULL pointer] - (0) if Ok *
- *
- **/
-static int informes_estaEnMiListaDeCuits(ListaCliente* cuits, int lenCuits, char * cuit)
-{
-	int i;
-	int retorno = 0 ;
-	for(i=0; i<lenCuits;i++)
-	{
-		if(cuits[i].isEmpty == FALSE && strncmp(cuit, cuits[i].cuit, lenCuits)==0)
+		for(indiceCliente=0;indiceCliente<limiteCliente;indiceCliente++)
 		{
-			retorno = 1;
-			break;
+			if(informes_contarAvisos(pArray,limite,pArrayCliente[indiceCliente].idCliente, &cantidadAvisos)==0)
+			{
+				if(auxBuffer == 0 || maximoAvisos < cantidadAvisos)
+				{
+					auxBuffer=FALSE;
+					maximoAvisos=cantidadAvisos;
+					idMaximoAvisos=pArrayCliente[indiceCliente].idCliente;
+					retorno=0;
+				}
+			}
 		}
+	}
+	if(cliente_buscarIndicePorId(pArrayCliente,limiteCliente, idMaximoAvisos, &indiceAImprimir)==0)
+	{
+		printf("CLIENTE CON MAS AVISOS");
+		printf("\n Nombre Cliente - %s - Apellido Cliente %s - ID Cliente: %d - CANTIDAD AVISOS: %d\n",pArrayCliente[indiceAImprimir].nombreCliente,pArrayCliente[indiceAImprimir].apellidoCliente,idMaximoAvisos, maximoAvisos);
+	}
+
+	return retorno;
+}
+/** \brief cuenta cuantos avisos tiene un cliente
+ * \param Publicaciones* pArrays, Pointer to Publicaciones array
+ * \param int limite, Publicaciones array lenght
+ * \param int idCliente, client ID
+ * \param int* avisos, pointer to the memory space where the calculated value will be saved
+ * \return (0) if OK or (-1) if [Invalid lenght or NULL pointer received or employee not found
+ */
+int informes_contarAvisos (Publicaciones* pArrays, int limite, int idCliente, int* avisos)
+{
+	int retorno = -1;
+	int i;
+	int bufferCounter=0;
+	if(pArrays!=NULL && limite>0 && avisos!=NULL && idCliente>0)
+	{
+		for(i=0;i<limite;i++)
+		{
+			if(pArrays[i].isEmpty==0 && pArrays[i].idCliente==idCliente && pArrays[i].estadoPublicacion==ACTIVA)
+			{
+				bufferCounter++;
+			}
+		}
+		retorno = 0;
+		*avisos = bufferCounter;
 	}
 	return retorno;
 }
-/** \brief  Función que permite generar una lista de clientes, *
+
+/* \brief  	*Función que permite averiguar cantidad de publicaciones pausadas,
  *           * \param list ListaCliente* Pointer to array of ListaCliente
  *           * \param len lenCuits Array length
  *           * \param list *cuit
  *           * \return int Return (-1) if Error [Invalid length or NULL pointer] - (0) if Ok *
  *
  **/
-static void informes_listaClientesConPublicaciones(ListaCliente *cuits, int lenCuits, Cliente * ArrayCliente)
-{
 
-	int indexCont;
-	int indexCuits=0;
-	informes_inicializarArray(cuits, lenCuits);
-	for(indexCont= 0; indexCont < lenCuits; indexCont++ )
-	{
-		if(informes_estaEnMiListaDeCuits(cuits, lenCuits, ArrayCliente[indexCont].cuitCliente)==0)
-		{
-			strcpy(cuits[indexCuits].cuit, ArrayCliente[indexCont].cuitCliente);
-			cuits[indexCuits].isEmpty = FALSE;
-			indexCuits++;
-		}
-	}
-}
-/** \brief  Función que permite generar una lista de clientes, *
- *           * \param list ListaCliente* Pointer to array of ListaCliente
- *           * \param len lenCuits Array length
- *           * \param list *cuit
- *           * \return int Return (-1) if Error [Invalid length or NULL pointer] - (0) if Ok *
- *
- **/
-void informes_generarListaClientes(Publicaciones* pArrays, int limite, Cliente * ArrayCliente, int limiteCliente)
-{
-	// generar la lista de clientes
-	ListaCliente cuit[1000];
-	informes_listaClientesConPublicaciones(cuit,1000, ArrayCliente);
-	printf("\nNombre CLiente: %s - \nApellido CLiente: %s -\nCUIT CLiente: %d", ArrayCliente[limite].nombreCliente,ArrayCliente[limite].apellidoCliente, ArrayCliente[limite].cuitCliente);
-	// pasar la maqueta del lgoritmo del informe aca.
-
-}
-
-/** \brief  Función que permite averiguar cantidad del  publicaciones pausadas, *
- *           * \param list ListaCliente* Pointer to array of ListaCliente
- *           * \param len lenCuits Array length
- *           * \param list *cuit
- *           * \return int Return (-1) if Error [Invalid length or NULL pointer] - (0) if Ok *
- *
- **/
 int informes_catidadAvisosPausados(Publicaciones *pArray, int limite, Cliente * ArrayCliente, int limiteCliente)
 {
 	int retorno = -1;
@@ -107,37 +99,77 @@ int informes_catidadAvisosPausados(Publicaciones *pArray, int limite, Cliente * 
 	{
 		for(int i = 0; i < limite; i++)
 		{
-			if(pArray[i].estadoPublicacion == PAUSADA)
+			if(pArray[i].isEmpty==FALSE && pArray[i].estadoPublicacion == PAUSADA)
 			{
 				contadorPausados++;
 			}
 		}
+		printf("PUBLICACIONES PAUSADAS");
 		printf("\nLa cantidad de publicaciones pausadas son: %d\n", contadorPausados);
 	}
 	return retorno;
 }
-/** \brief  Función que permite averiguar cantidad del publicaciones reanudadas, *
- *           * \param list ListaCliente* Pointer to array of ListaCliente
- *           * \param len lenCuits Array length
- *           * \param list *cuit
- *           * \return int Return (-1) if Error [Invalid length or NULL pointer] - (0) if Ok *
- *
- **/
-int informes_clienteConMasAvisos(Publicaciones *pArray, int limite, Cliente * ArrayCliente, int limiteCliente)
+
+
+/** \brief Permite calcular que rubro tiene mas avisos
+ * \param Publicaciones* pArray, Pointer to Publicaciones array
+ * \param int limite, Ads's array lenght
+ * \param Cliente* pArrayCliente, Pointer to Cliente array
+ * \param int limiteCliente, Clients's array lenght
+
+ * \return (0) if OK or (-1) if [Invalid lenght or NULL pointer received or employee not found
+ */
+int informes_rubroConMasAvisos(Publicaciones* pArray,int limite ,Cliente* pArrayCliente,int limiteCliente)
 {
-	int retorno = -1;
-	int idBuscar;
-	int indiceAModificar;
-	int auxBuffer;
-	if(pArray != NULL && limite > 0 && ArrayCliente != NULL && limiteCliente > 0 )
+	int retorno=-1;
+	int indice;
+	int cantidadRubros;
+	int auxBuffer=TRUE;
+	int maxRubros;
+
+	if(pArray!=NULL && limite>0 && pArrayCliente!=NULL && limiteCliente>0)
+	{
+		for(indice=0;indice<limiteCliente;indice++)
 		{
-			for(int i = 0; i < limite; i++)
+			if(informes_contarRubro(pArray,limite,pArray[indice].numeroRubro, &cantidadRubros)==0)
 			{
-				if(publicaciones_buscarIndicePorId(pArray, limite, idBuscar,&indiceAModificar) == 0)
+				if(auxBuffer==TRUE || maxRubros < cantidadRubros)
 				{
-					auxBuffer++;
+					auxBuffer=FALSE;
+					maxRubros=cantidadRubros;
+					retorno=0;
 				}
 			}
 		}
+	}
+		printf("RUBRO CON MAS AVISOS");
+		printf("\nEl número del rubro con mas avisos es %d\n", maxRubros);
 	return retorno;
 }
+/** \brief Cuenta cuantas publicaciones tiene un rubro
+ * \param Advertisement* pArray, Pointer to Ads's array
+ * \param int len, Ads's array lenght
+ * \param int idClient, client ID
+ * \param int* activeAdsCounter, pointer to the memory space where the calculated value will be saved
+ * \return (0) if OK or (-1) if [Invalid lenght or NULL pointer received or employee not found
+ */
+int informes_contarRubro (Publicaciones* pArrays, int limite, int numeroRubro, int* rubros)
+{
+	int retorno = -1;
+	int i;
+	int bufferCounter=0;
+	if(pArrays!=NULL && limite>0 && rubros!=NULL && numeroRubro>0)
+	{
+		for(i=0;i<limite;i++)
+		{
+			if(pArrays[i].isEmpty == FALSE && pArrays[i].numeroRubro == numeroRubro && pArrays[i].estadoPublicacion == ACTIVA)
+			{
+				bufferCounter++;
+			}
+		}
+		retorno = 0;
+		*rubros = bufferCounter;
+	}
+	return retorno;
+}
+
