@@ -36,12 +36,12 @@ int main(void)
 
 
 		publicaciones_altaForzada(arrayPublicaciones,QTY_PUBLICACIONES,2,3,"aaaaaaaaaa");
-		publicaciones_altaForzada(arrayPublicaciones,QTY_PUBLICACIONES,3,3,"bbbbbbbbbb");
+		publicaciones_altaForzada(arrayPublicaciones,QTY_PUBLICACIONES,4,3,"bbbbbbbbbb");
 		publicaciones_altaForzada(arrayPublicaciones,QTY_PUBLICACIONES,1,2,"cccccccccc");
 		publicaciones_altaForzada(arrayPublicaciones,QTY_PUBLICACIONES,1,3,"dddddddddd");
-		publicaciones_altaForzada(arrayPublicaciones,QTY_PUBLICACIONES,5,5,"eeeeeeeeee");
-		publicaciones_altaForzada(arrayPublicaciones,QTY_PUBLICACIONES,4,5,"ffffffffff");
-		publicaciones_altaForzada(arrayPublicaciones,QTY_PUBLICACIONES,6,5,"gggggggggg");
+		publicaciones_altaForzada(arrayPublicaciones,QTY_PUBLICACIONES,5,4,"eeeeeeeeee");
+		publicaciones_altaForzada(arrayPublicaciones,QTY_PUBLICACIONES,1,5,"ffffffffff");
+		publicaciones_altaForzada(arrayPublicaciones,QTY_PUBLICACIONES,5,5,"gggggggggg");
 
 	do {
 
@@ -103,7 +103,11 @@ int main(void)
 		case 8:
 
 			do{
-				if(utn_getInt("\n1- Cliente con más avisos.\n2- Cantidad de avisos pausados.\n3- Rubro con mas avisos.\n4- Salir.\n","\nError", &opInforme, 2, 4, 1)==0)
+				if(utn_getInt("\n1- Cliente con más avisos.\n2- Cantidad de avisos pausados.\n3- Rubro con mas avisos.\n4- Cliente con mas avisos pausados.\n5- Cliente con mas avisos Activos"
+						"\n6- Imprimir lista de rubros ordenados de menor a mayor. \n7- Cantidad de avisos activos totales\n8- Cliente con menos avisos"
+						"\n9- Cantidad por rubro: Ingresar por consola un numero de rubro e imprimir la cantidad de avisos que existen de dicho rubro."
+						"\n10- Cantidad por cliente: Ingresar por consola un cuit e imprimir la cantidad de avisos que existen de dicho cliente."
+						"\n11- Salir\n ","\nError", &opInforme, 2, 11, 0)==0)
 				{
 					switch (opInforme) {
 					case 1:
@@ -121,9 +125,44 @@ int main(void)
 						informes_rubroConMasAvisos(arrayPublicaciones,	QTY_PUBLICACIONES, arrayCliente, QTY_CLIENTES);
 						printf("\n-----------------------------------------------------------------------------------------------\n");
 						break;
+					case 4:
+						printf("\n-----------------------------------------------------------------------------------------------\n");
+						informes_clienteConMasAvisosPausados(arrayPublicaciones,	QTY_PUBLICACIONES, arrayCliente, QTY_CLIENTES);
+						printf("\n-----------------------------------------------------------------------------------------------\n");
+						break;
+					case 5:
+						printf("\n-----------------------------------------------------------------------------------------------\n");
+						informes_clienteConMasAvisosActivos(arrayPublicaciones,	QTY_PUBLICACIONES, arrayCliente, QTY_CLIENTES);
+						printf("\n-----------------------------------------------------------------------------------------------\n");
+						break;
+					case 6:
+						printf("\n-----------------------------------------------------------------------------------------------\n");
+						informes_imprimirRubrosOrdenados(arrayPublicaciones,	QTY_PUBLICACIONES, arrayCliente, QTY_CLIENTES);
+						printf("\n-----------------------------------------------------------------------------------------------\n");
+						break;
+					case 7:
+						printf("\n-----------------------------------------------------------------------------------------------\n");
+						informes_catidadAvisosActivos(arrayPublicaciones,	QTY_PUBLICACIONES, arrayCliente, QTY_CLIENTES);
+						printf("\n-----------------------------------------------------------------------------------------------\n");
+						break;
+					case 8:
+						printf("\n-----------------------------------------------------------------------------------------------\n");
+						informes_clienteConMenosAvisos(arrayPublicaciones,	QTY_PUBLICACIONES, arrayCliente, QTY_CLIENTES);
+						printf("\n-----------------------------------------------------------------------------------------------\n");
+						break;
+					case 9:
+						printf("\n-----------------------------------------------------------------------------------------------\n");
+						informes_cantidadPorRubro(arrayPublicaciones,	QTY_PUBLICACIONES, arrayCliente, QTY_CLIENTES);
+						printf("\n-----------------------------------------------------------------------------------------------\n");
+						break;
+					case 10:
+						printf("\n-----------------------------------------------------------------------------------------------\n");
+						informes_cantidadPorCliente(arrayPublicaciones,	QTY_PUBLICACIONES, arrayCliente, QTY_CLIENTES);
+						printf("\n-----------------------------------------------------------------------------------------------\n");
+											break;
 					}
 			 }
-			}while(opInforme != 4);
+			}while(opInforme != 6);
 		}
 	} while (op != 9);
 
